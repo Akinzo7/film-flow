@@ -1,0 +1,7 @@
+@source "./src/**/*.{js,jsx,ts,tsx}";
+@import "tailwindcss";
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+}
