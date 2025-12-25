@@ -1,7 +1,7 @@
 import React from "react";
-export function Logo({}) {
+export function Logo() {
   return <div>
-            <p>Film<span>Flow</span></p>
+            <p className="font-extrabold text-2xl">Film<span className="text-amber-500">Flow</span></p>
         </div>;
 }
   

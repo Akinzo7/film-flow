@@ -1,23 +1,30 @@
+import { useState } from "react";
 import Navbar from "./components/Navbar/Navbar";
 import Search from "./components/Search";
 import useFetch from "./hooks/useFetch";
 
 function App() {
-//   const title = "Avengers";
-//   const API_KEY = import.meta.env.VITE_OMDB_KEY;
-//   const BASE_URL = import.meta.env.VITE_MOVIE_BASE_URL;
-//   const url = `${BASE_URL}?t=${title}&apikey=${API_KEY}`;
-//  http://www.omdbapi.com/?i=tt3896198&apikey=76d75171
-//   const { data: movie, isLoading, isError } = useFetch(url);
-//   console.log(movie);
-  return <div className="min-h-screen bg-gray-900 text-white">
-    <header className="pt-6 px-8">
-      <Navbar/>
-    </header>
-    <main>
-      <Search />
-    </main>
-  </div>;
+  const [search, setSearch] = useState("");
+ 
+  const url =
+    search.trim() === ""
+      ? null
+      : `http://www.omdbapi.com/?s=${search}&apikey=${import.meta.env.VITE_OMDB_KEY}`;
+
+        // http://www.omdbapi.com/?s=avengers&apikey=76d75171
+        // image http://img.omdbapi.com/?apikey=76d75171&s=avengers
+  const { data: movies, isLoading, isError } = useFetch(url);
+        console.log(movies);
+  return (
+    <div className="min-h-screen bg-gray-900 text-white">
+      <header className="pt-6 px-8">
+        <Navbar />
+      </header>
+      <main className="flex flex-col items-center justify-center w-full">
+        <Search search={search} setSearch={setSearch} />
+      </main>
+    </div>
+  );
 }
 
 export default App;

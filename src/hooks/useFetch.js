@@ -6,6 +6,7 @@ const useFetch = (url) => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
+    if(!url) return;
     const fetchData = async () => {
       try {
         const resp = await fetch(url);
@@ -26,7 +27,7 @@ const useFetch = (url) => {
       setIsLoading(false);
     };
     fetchData();
-  }, []);
+  }, [url]);
   // order matters
   // don't place user JSX before loading or error
 
