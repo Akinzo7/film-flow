@@ -1,6 +1,6 @@
 import MovieCard from "./MovieCard";
 
-function MovieResults({ movies, isLoading, isError }) {
+function MovieResults({ movies, isLoading, isError, searchQuery }) {
   if (isLoading) return <p className="mt-10">Loading...</p>;
 
   if (isError) return <p className="mt-10">Error loading movies </p>;
@@ -15,7 +15,7 @@ function MovieResults({ movies, isLoading, isError }) {
   return (
     <div className="w-full md:mx-auto md:max-w-[1300px] mt-10 px-2 px-4">
       <p className="text-4xl my-5 font-medium">
-        Search results for Guardians of the Galaxy{" "}
+        Search results for <span className="text-amber-500">{searchQuery}</span>{" "}
         <small className="text-2xl text-neutral-500">
           {resultsCount} results found
         </small>
