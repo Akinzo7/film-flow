@@ -1,10 +1,12 @@
   import { IoIosSearch } from "react-icons/io";
 
-function Search({search, setSearch}) {
+function Search({search, setSearch, onSearchSubmit}) {
 const handleSubmit = (e) => {
   e.preventDefault();
-  console.log(search);
-  setSearch("");
+  if(search.trim()){
+    onSearchSubmit(search.trim());
+  } 
+  
 }
 
   return (

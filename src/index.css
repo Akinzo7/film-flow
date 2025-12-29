@@ -9,7 +9,7 @@ body {
 .movie_grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 200px));
-  gap: 1rem;
+  row-gap: 1.5rem;
   justify-content: space-between;
 }
 
