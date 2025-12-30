@@ -21,7 +21,7 @@ function HomePage() {
   const { data: movies, isLoading, isError } = useFetch(url);
 
   return (
-    <main className="flex flex-col items-center justify-center w-full">
+    <div className="flex flex-col items-center justify-center w-full">
       <Search
         search={searchInput}
         setSearch={setSearchInput}
@@ -33,7 +33,7 @@ function HomePage() {
         isError={isError}
         searchQuery={searchQuery}
       />
-    </main>
+    </div>
   );
 }
 export default HomePage;
