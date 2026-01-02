@@ -95,7 +95,7 @@ function MovieInfo() {
         style={{
           backgroundImage: `url('https://image.tmdb.org/t/p/original${movie.backdrop_path}')`,
         }}
-        className="relative mt-9 bg-cover bg-center min-h-[300px] max-h-[400px] md:min-h-[600px] md:max-h-[800px] bg-no-repeat "
+        className="relative bg-cover bg-center min-h-[300px] max-h-[400px] md:min-h-[600px] md:max-h-[800px] bg-no-repeat "
       >
         <div className="absolute w-full h-full md:flex items-end gap-8 md:px-16 bg-linear-1 from-[#101828] from-10% to-[rgba(0,0,0,0.21)] to-57% md:pb-20">
           <div className="hidden md:block w-57 h-auto shadow-lg">
