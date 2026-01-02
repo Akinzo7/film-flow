@@ -1,12 +1,9 @@
 import { useState, useEffect } from "react";
 import MovieResults from "./Movie/MovieResults";
-import Search from "./Search";
 import useFetch from "../hooks/useFetch";
 
-function HomePage() {
-  const [searchInput, setSearchInput] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
-
+function HomePage({searchQuery}) {
+ 
   const url = searchQuery
     ? `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(
         searchQuery
@@ -22,11 +19,7 @@ function HomePage() {
 
   return (
     <div className="flex flex-col items-center justify-center w-full">
-      <Search
-        search={searchInput}
-        setSearch={setSearchInput}
-        onSearchSubmit={setSearchQuery}
-      />
+     
       <MovieResults
         movies={movies}
         isLoading={isLoading}
