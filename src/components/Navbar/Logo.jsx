@@ -1,10 +1,11 @@
 import React from "react";
+import { Link } from "react-router-dom";
 export function Logo() {
   return (
     <div>
-      <p className="font-extrabold text-2xl">
+      <Link to="/" className="font-extrabold text-xl md:text-2xl cursor-pointer">
         Film<span className="text-amber-500">Flow</span>
-      </p>
+      </Link>
     </div>
   );
 }

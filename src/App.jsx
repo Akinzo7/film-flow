@@ -6,7 +6,7 @@ import MovieInfo from "./components/Movie/MovieInfo";
 function App() {
   return (
     <div className="min-h-screen bg-gray-900 grid grid-rows-[auto_1fr_auto] grid-cols-1 text-white ">
-      <header className=" area-header pt-6 px-8">
+      <header className=" area-header pt-3 md:pt-6 md:px-8 px-4">
         <Navbar />
       </header>
       <main className="area-main mb-7">
