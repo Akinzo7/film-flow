@@ -66,8 +66,10 @@ function AiringTodayTVCarousel({ tvShows }) {
             id: tvShow.id,
             title: tvShow.name,
             poster_path: tvShow.poster_path,
-            release_date: tvShow.first_air_date,
+            release_date: tvShow.first_air_date, // Keep for compatibility
+            first_air_date: tvShow.first_air_date, // Add this line!
             vote_average: tvShow.vote_average,
+            isTVShow: true, // Optional: add a flag
           };
 
           return (

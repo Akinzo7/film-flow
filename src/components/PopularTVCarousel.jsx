@@ -67,6 +67,7 @@ function PopularTVCarousel({ tvShows }) {
             title: tvShow.name,
             poster_path: tvShow.poster_path,
             release_date: tvShow.first_air_date,
+            first_air_date: tvShow.first_air_date,
             vote_average: tvShow.vote_average,
           };
 

@@ -9,7 +9,29 @@ export function FavoritesProvider({ children }) {
   useEffect(() => {
     const storedFavorites = localStorage.getItem('filmFlowFavorites');
     if (storedFavorites) {
-      setFavorites(JSON.parse(storedFavorites));
+      const parsedFavorites = JSON.parse(storedFavorites);
+      
+      // MIGRATION LOGIC: Add this section
+      const migratedFavorites = parsedFavorites.map(item => {
+        // If item already has type, keep it
+        if (item.type) {
+          return item;
+        }
+        
+        // Check multiple ways to determine type
+        if (item.first_air_date) {
+          // Has first_air_date = TV show
+          return { ...item, type: 'tv' };
+        } else if (item.name && !item.title) {
+          // Has name but no title = TV show
+          return { ...item, type: 'tv' };
+        } else {
+          // Default to movie
+          return { ...item, type: 'movie' };
+        }
+      });
+      
+      setFavorites(migratedFavorites);
     }
   }, []);
 
@@ -18,35 +40,47 @@ export function FavoritesProvider({ children }) {
     localStorage.setItem('filmFlowFavorites', JSON.stringify(favorites));
   }, [favorites]);
 
-  // Add movie to favorites
-  const addFavorite = (movie) => {
+  // Add item to favorites
+  const addFavorite = (item) => {
     setFavorites((prevFavorites) => {
-      // Check if movie already exists
-      if (!prevFavorites.some(fav => fav.id === movie.id)) {
-        return [...prevFavorites, movie];
+      // Check if item already exists
+      if (!prevFavorites.some(fav => fav.id === item.id)) {
+        return [...prevFavorites, item];
       }
       return prevFavorites;
     });
   };
 
-  // Remove movie from favorites
-  const removeFavorite = (movieId) => {
+  // Remove item from favorites
+  const removeFavorite = (itemId) => {
     setFavorites((prevFavorites) => 
-      prevFavorites.filter(movie => movie.id !== movieId)
+      prevFavorites.filter(item => item.id !== itemId)
     );
   };
 
-  // Check if movie is favorited
-  const isFavorite = (movieId) => {
-    return favorites.some(movie => movie.id === movieId);
+  // Check if item is favorited
+  const isFavorite = (itemId) => {
+    return favorites.some(item => item.id === itemId);
   };
 
   // Toggle favorite status
-  const toggleFavorite = (movie) => {
-    if (isFavorite(movie.id)) {
-      removeFavorite(movie.id);
+  const toggleFavorite = (item) => {
+    // Determine type
+    let type = 'movie';
+    
+    // Check if it's a TV show
+    if (item.first_air_date) {
+      type = 'tv';
+    } else if (item.name && !item.title) {
+      type = 'tv';
+    }
+    
+    const itemWithType = { ...item, type };
+    
+    if (isFavorite(item.id)) {
+      removeFavorite(item.id);
     } else {
-      addFavorite(movie);
+      addFavorite(itemWithType);
     }
   };
 

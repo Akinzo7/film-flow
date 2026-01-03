@@ -49,10 +49,10 @@ function PopularMoviesCarousel({ movies }) {
       </button>
 
       {/* Carousel container */}
-     <div
-  ref={scrollContainerRef}
-  className="flex gap-4 overflow-x-auto scroll-smooth pb-4 pt-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" // Added pt-2
->
+      <div
+        ref={scrollContainerRef}
+        className="flex gap-4 overflow-x-auto scroll-smooth pb-4 pt-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" // Added pt-2
+      >
         {movies.map((movie, index) => {
           const movieTitle = movie.title || "Untitled";
           const year = movie.release_date?.split("-")[0] || "";

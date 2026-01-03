@@ -38,31 +38,31 @@ function HamburgerMenu() {
               </Link>
             </li>
             <li>
-              <a
-                href="#movies"
+              <Link
+                to="/movies"
                 className="block text-white hover:text-amber-500 py-2"
                 onClick={() => setIsOpen(false)}
               >
                 Movies
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="#series"
+              <Link
+                to="/series"
                 className="block text-white hover:text-amber-500 py-2"
                 onClick={() => setIsOpen(false)}
               >
                 Series
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="#favorites"
+              <Link
+                to="/favorites"
                 className="block text-white hover:text-amber-500 py-2"
                 onClick={() => setIsOpen(false)}
               >
                 Favorites
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
