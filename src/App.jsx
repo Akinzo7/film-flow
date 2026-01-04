@@ -1,9 +1,11 @@
 import { Footer } from './components/Footer';
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
-import HomePage from "./components/HomePage";
+import HomePage from "./Pages/HomePage";
 import MovieInfo from "./components/Movie/MovieInfo";
 import Favorites from "./components/Favorites"; 
+import MoviePage from "./Pages/MoviePage";  // Add this import
+import TVShowsPage from "./Pages/TVShowsPage";  // Add this import
 import { useState } from "react";
 
 function App() {
@@ -23,14 +25,14 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage searchQuery={searchQuery} />} />
           <Route path="/movie/:id" element={<MovieInfo />} />
-          {/* Add this route for Favorites */}
+          <Route path="/tv/:id" element={<MovieInfo />} />  {/* Add TV show detail route */}
           <Route path="/favorites" element={<Favorites />} />
-          {/* Add placeholder routes for Movies and Series if needed */}
-          <Route path="/movies" element={<div className="text-center py-20">Movies page coming soon</div>} />
-          <Route path="/series" element={<div className="text-center py-20">Series page coming soon</div>} />
+          {/* Use the actual page components */}
+          <Route path="/movies" element={<MoviePage />} />
+          <Route path="/series" element={<TVShowsPage />} />
         </Routes>
       </main>
-     <Footer     />
+     <Footer />
     </div>
   );
 }

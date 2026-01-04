@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import MovieResults from "./Movie/MovieResults";
+import MovieResults from "../components/Movie/MovieResults";
 import useFetch from "../hooks/useFetch";
-import HeroSection from "./HeroSection";
-import PopularMoviesCarousel from "./PopularMoviesCarousel";
-import PopularTVCarousel from "./PopularTVCarousel";
-import UpcomingMoviesCarousel from "./UpcomingMoviesCarousel";
-import FreeToWatchCarousel from "./FreeToWatchCarousel";
-import AiringTodayTVCarousel from "./AiringTodayTVCarousel";
-import ExpandedSection from "./ExpandedSection";
+import HeroSection from "../components/HeroSection";
+import PopularMoviesCarousel from "../components/PopularMoviesCarousel";
+import PopularTVCarousel from "../components/PopularTVCarousel";
+import UpcomingMoviesCarousel from "../components/UpcomingMoviesCarousel";
+import FreeToWatchCarousel from "../components/FreeToWatchCarousel";
+import AiringTodayTVCarousel from "../components/AiringTodayTVCarousel";
+import ExpandedSection from "../components/ExpandedSection";
 
 function HomePage({ searchQuery }) {
   const url = searchQuery

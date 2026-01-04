@@ -97,7 +97,7 @@ function HeroSection({ movies }) {
       </div>
       
       {/* Navigation Arrows */}
-      <button
+      {/* <button
         onClick={prevSlide}
         className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 p-3 rounded-full transition-colors"
       >
@@ -109,7 +109,7 @@ function HeroSection({ movies }) {
         className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 p-3 rounded-full transition-colors"
       >
         <FaChevronRight className="text-white w-6 h-6" />
-      </button>
+      </button> */}
     </div>
   );
 }
