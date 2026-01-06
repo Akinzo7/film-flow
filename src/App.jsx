@@ -4,8 +4,8 @@ import Navbar from "./components/Navbar/Navbar";
 import HomePage from "./Pages/HomePage";
 import MovieInfo from "./components/Movie/MovieInfo";
 import Favorites from "./components/Favorites"; 
-import MoviePage from "./Pages/MoviePage";  // Add this import
-import TVShowsPage from "./Pages/TVShowsPage";  // Add this import
+import MoviePage from "./Pages/MoviePage"; 
+import TVShowsPage from "./Pages/TVShowsPage"; 
 import { useState } from "react";
 
 function App() {
