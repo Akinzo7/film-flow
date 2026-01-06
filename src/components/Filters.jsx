@@ -9,7 +9,6 @@ function Filters({
 }) {
   const [filters, setFilters] = useState({
     genres: [],
-    year: "",
     minYear: 1900,
     maxYear: 2026,
     language: "",
@@ -19,13 +18,16 @@ function Filters({
   const [isGenreOpen, setIsGenreOpen] = useState(false);
   const [isYearOpen, setIsYearOpen] = useState(false);
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
+  const [isSortOpen, setIsSortOpen] = useState(false); // NEW: State for sort dropdown
   const [availableGenres, setAvailableGenres] = useState([]);
   const [availableLanguages, setAvailableLanguages] = useState([]);
+  
 
   // Refs for dropdowns to handle click outside
   const genreRef = useRef(null);
   const yearRef = useRef(null);
   const languageRef = useRef(null);
+  const sortRef = useRef(null); // NEW: Ref for sort dropdown
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -38,6 +40,10 @@ function Filters({
       }
       if (languageRef.current && !languageRef.current.contains(event.target)) {
         setIsLanguageOpen(false);
+      }
+      // NEW: Close sort dropdown when clicking outside
+      if (sortRef.current && !sortRef.current.contains(event.target)) {
+        setIsSortOpen(false);
       }
     };
 
@@ -124,60 +130,49 @@ function Filters({
     setIsGenreOpen(false);
   };
 
-  // Handle min year change
-  const handleMinYearChange = (e) => {
-    const value = Math.min(parseInt(e.target.value), filters.maxYear - 1);
-    setFilters((prev) => {
-      const newFilters = { 
-        ...prev, 
-        minYear: value,
-        year: "" // Clear single year filter
-      };
+  // FIXED: Handle min year change with proper validation
+  // This function is called when the user moves the minimum year slider
+const handleMinYearChange = (e) => {
+  const newMin = Number(e.target.value);
+  setFilters((prev) => {
+    if (newMin > prev.maxYear) {
+      // swap so min <= max
+      const newFilters = { ...prev, minYear: prev.maxYear, maxYear: newMin };
       onFilterChange(newFilters);
       return newFilters;
-    });
-  };
+    }
+    const newFilters = { ...prev, minYear: newMin };
+    onFilterChange(newFilters);
+    return newFilters;
+  });
+};
 
-  // Handle max year change
-  const handleMaxYearChange = (e) => {
-    const value = Math.max(parseInt(e.target.value), filters.minYear + 1);
-    setFilters((prev) => {
-      const newFilters = { 
-        ...prev, 
-        maxYear: value,
-        year: "" // Clear single year filter
-      };
+  // FIXED: Handle max year change with proper validation
+  // This function is called when the user moves the maximum year slider
+const handleMaxYearChange = (e) => {
+  const newMax = Number(e.target.value);
+  setFilters((prev) => {
+    if (newMax < prev.minYear) {
+      // swap so min <= max
+      const newFilters = { ...prev, minYear: newMax, maxYear: prev.minYear };
       onFilterChange(newFilters);
       return newFilters;
-    });
-  };
-
+    }
+    const newFilters = { ...prev, maxYear: newMax };
+    onFilterChange(newFilters);
+    return newFilters;
+  });
+};
   // Clear year range (reset to defaults)
-  const clearYearRange = () => {
-    setFilters((prev) => {
-      const newFilters = { 
-        ...prev, 
-        minYear: 1900,
-        maxYear: 2026,
-        year: ""
-      };
-      onFilterChange(newFilters);
-      return newFilters;
-    });
+ const clearYearRange = () => {
+  const newFilters = {
+    ...filters,
+    minYear: 1900,
+    maxYear: 2026,
   };
-
-  // Handle single year selection
-  const handleYearChange = (year) => {
-    setFilters((prev) => {
-      const newFilters = { 
-        ...prev, 
-        year: year === prev.year ? "" : year
-      };
-      onFilterChange(newFilters);
-      return newFilters;
-    });
-    setIsYearOpen(false);
-  };
+  setFilters(newFilters);
+  onFilterChange(newFilters);
+};
 
   // Handle language selection
   const handleLanguageChange = (languageCode) => {
@@ -192,28 +187,29 @@ function Filters({
     setIsLanguageOpen(false);
   };
 
-  // Handle sort change
-  const handleSortChange = (sortBy) => {
+  // NEW: Handle sort change from dropdown
+  // This function is called when user selects a sort option
+  const handleSortChange = (sortValue) => {
     setFilters((prev) => {
-      const newFilters = { ...prev, sortBy };
+      const newFilters = { ...prev, sortBy: sortValue };
       onFilterChange(newFilters);
       return newFilters;
     });
+    setIsSortOpen(false); // Close dropdown after selection
   };
 
   // Clear all filters
-  const clearAllFilters = () => {
-    const clearedFilters = {
-      genres: [],
-      year: "",
-      minYear: 1900,
-      maxYear: 2026,
-      language: "",
-      sortBy: sortOptions[0].value,
-    };
-    setFilters(clearedFilters);
-    onFilterChange(clearedFilters);
+const clearAllFilters = () => {
+  const clearedFilters = {
+    genres: [],
+    minYear: 1900,
+    maxYear: 2026,
+    language: "",
+    sortBy: sortOptions[0].value,
   };
+  setFilters(clearedFilters);
+  onFilterChange(clearedFilters);
+};
 
   // Get selected language name
   const getSelectedLanguageName = () => {
@@ -224,15 +220,21 @@ function Filters({
     return lang ? lang.english_name : filters.language;
   };
 
+  // NEW: Get selected sort option label
+  // This function finds and returns the label for the currently selected sort option
+  const getSelectedSortLabel = () => {
+    const selectedOption = sortOptions.find(
+      (option) => option.value === filters.sortBy
+    );
+    return selectedOption ? selectedOption.label : "Sort By";
+  };
+
   // Get year display text
   const getYearDisplay = () => {
-    if (filters.year) {
-      return filters.year;
-    } else if (filters.minYear === 1900 && filters.maxYear === 2026) {
+    if (filters.minYear === 1900 && filters.maxYear === 2026) {
       return "Any Year";
-    } else {
-      return `${filters.minYear} - ${filters.maxYear}`;
     }
+    return `${filters.minYear} - ${filters.maxYear}`;
   };
 
   // Calculate slider positions for visual track
@@ -244,8 +246,10 @@ function Filters({
       {/* Filter Header */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-white">Filters</h2>
-        {(filters.genres.length > 0 || filters.year || filters.language || 
-          filters.minYear !== 1900 || filters.maxYear !== 2026) && (
+        {(filters.genres.length > 0 ||
+          filters.language ||
+          filters.minYear !== 1900 ||
+          filters.maxYear !== 2026) && (
           <button
             onClick={clearAllFilters}
             className="text-sm text-blue-400 hover:text-blue-300 flex items-center gap-1"
@@ -255,30 +259,8 @@ function Filters({
         )}
       </div>
 
-      {/* Sort By */}
-      <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-300 mb-3">
-          Sort By
-        </label>
-        <div className="flex flex-wrap gap-2">
-          {sortOptions.map((option) => (
-            <button
-              key={option.value}
-              onClick={() => handleSortChange(option.value)}
-              className={`px-4 py-2 rounded-lg text-sm transition-all ${
-                filters.sortBy === option.value
-                  ? "bg-blue-600 text-white shadow-md"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700 hover:shadow-sm"
-              }`}
-            >
-              {option.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
       {/* Filter Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="flex gap-4">
         {/* Genre Filter */}
         <div className="relative" ref={genreRef}>
           <button
@@ -301,7 +283,7 @@ function Filters({
           </button>
 
           {isGenreOpen && (
-            <div className="absolute z-10 mt-2 w-full bg-gray-800 rounded-lg shadow-xl max-h-60 overflow-y-auto">
+            <div className="absolute min-w-[150px] z-10 mt-2 w-full bg-gray-800 rounded-lg shadow-xl max-h-60 overflow-y-auto">
               <div className="p-2">
                 {availableGenres.map((genre) => (
                   <div
@@ -315,7 +297,7 @@ function Filters({
                       {genre.name}
                     </span>
                     {filters.genres.includes(genre.id) && (
-                      <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 ml-2"></div>
+                      <div className="w-2 h-2 bg-amber-500 rounded-full flex-shrink-0 ml-2"></div>
                     )}
                   </div>
                 ))}
@@ -324,7 +306,7 @@ function Filters({
           )}
         </div>
 
-        {/* Year Filter - Fixed slider */}
+        {/* FIXED: Year Filter with improved slider logic */}
         <div className="relative" ref={yearRef}>
           <button
             onClick={() => setIsYearOpen(!isYearOpen)}
@@ -334,9 +316,7 @@ function Filters({
               <div className="text-sm text-gray-400 truncate">
                 {mediaType === "movie" ? "Release Year" : "First Air Year"}
               </div>
-              <div className="text-white truncate">
-                {getYearDisplay()}
-              </div>
+              <div className="text-white truncate">{getYearDisplay()}</div>
             </div>
             {isYearOpen ? (
               <IoChevronUp className="text-gray-400 flex-shrink-0 ml-2" />
@@ -346,7 +326,7 @@ function Filters({
           </button>
 
           {isYearOpen && (
-            <div className="absolute z-10 mt-2 w-full bg-gray-800 rounded-lg shadow-xl p-4">
+            <div className="absolute min-w-[320px] z-10 mt-2 w-full bg-gray-800 rounded-lg shadow-xl p-4">
               <div className="mb-4">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-white text-sm">Year Range</span>
@@ -357,84 +337,75 @@ function Filters({
                     Reset
                   </button>
                 </div>
-                
-                {/* Fixed Range Slider */}
+
+                {/* FIXED Range Slider with better logic */}
                 <div className="space-y-6">
                   {/* Year range display */}
                   <div className="flex justify-between">
                     <div className="text-center">
-                      <div className="text-gray-300 text-sm font-medium">{filters.minYear}</div>
+                      <div className="text-gray-300 text-sm font-medium">
+                        {filters.minYear}
+                      </div>
                       <div className="text-gray-400 text-xs">Min</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-gray-300 text-sm font-medium">{filters.maxYear}</div>
+                      <div className="text-gray-300 text-sm font-medium">
+                        {filters.maxYear}
+                      </div>
                       <div className="text-gray-400 text-xs">Max</div>
                     </div>
                   </div>
-                  
-                  {/* Range slider container */}
+
+                  {/* IMPROVED: Range slider container with pointer-events control */}
                   <div className="relative py-4">
-                    {/* Background track */}
-                    <div className="absolute top-1/2 left-0 right-0 h-1.5 bg-gray-700 rounded-full -translate-y-1/2"></div>
-                    
-                    {/* Active track */}
-                    <div 
-                      className="absolute top-1/2 h-1.5 bg-blue-500 rounded-full -translate-y-1/2"
+                    {/* Background track (visual) — must not block pointer events */}
+                    <div className="absolute top-1/2 left-0 right-0 h-1.5 bg-gray-700 rounded-full -translate-y-1/2 pointer-events-none"></div>
+
+                    {/* Active track showing selected range (visual) */}
+                    <div
+                      className="absolute top-1/2 h-1.5 bg-amber-500 rounded-full -translate-y-1/2 pointer-events-none"
                       style={{
                         left: `${minPercent}%`,
-                        right: `${100 - maxPercent}%`
+                        right: `${100 - maxPercent}%`,
                       }}
                     ></div>
-                    
-                    {/* Min slider */}
-                    <input
-                      type="range"
-                      min="1900"
-                      max="2026"
-                      value={filters.minYear}
-                      onChange={handleMinYearChange}
-                      className="absolute top-1/2 left-0 right-0 w-full h-full opacity-0 cursor-pointer z-10"
-                    />
-                    
-                    {/* Max slider */}
-                    <input
-                      type="range"
-                      min="1900"
-                      max="2026"
-                      value={filters.maxYear}
-                      onChange={handleMaxYearChange}
-                      className="absolute top-1/2 left-0 right-0 w-full h-full opacity-0 cursor-pointer z-10"
-                    />
-                    
-                    {/* Custom slider thumbs */}
-                    <div 
-                      className="absolute top-1/2 w-4 h-4 bg-blue-500 rounded-full border-2 border-white shadow-lg -translate-x-1/2 -translate-y-1/2 z-20"
+
+                    {/* IMPROVED: Min year slider - styled to be more visible */}
+                   {/* Min slider input (ON TOP) */}
+<input
+  type="range"
+  min="1900"
+  max="2026"
+  step="1"
+  value={filters.minYear}
+  onChange={handleMinYearChange}
+  className="absolute top-1/2 left-0 right-0 w-full h-1.5 
+             -translate-y-1/2 appearance-none bg-transparent 
+             cursor-pointer z-40"
+/>
+
+                    {/* Max slider input (UNDER min) */}
+<input
+  type="range"
+  min="1900"
+  max="2026"
+  step="1"
+  value={filters.maxYear}
+  onChange={handleMaxYearChange}
+  className="absolute top-1/2 left-0 right-0 w-full h-1.5 
+             -translate-y-1/2 appearance-none bg-transparent 
+             cursor-pointer z-30"
+/>
+
+                    {/* Custom slider thumbs for visual feedback */}
+                    <div
+                      className="absolute top-1/2 w-4 h-4 bg-amber-500 rounded-full border-2 border-white shadow-lg -translate-x-1/2 -translate-y-1/2 pointer-events-none z-40"
                       style={{ left: `${minPercent}%` }}
                     ></div>
-                    <div 
-                      className="absolute top-1/2 w-4 h-4 bg-blue-500 rounded-full border-2 border-white shadow-lg -translate-x-1/2 -translate-y-1/2 z-20"
+                    <div
+                      className="absolute top-1/2 w-4 h-4 bg-amber-500 rounded-full border-2 border-white shadow-lg -translate-x-1/2 -translate-y-1/2 pointer-events-none z-40"
                       style={{ left: `${maxPercent}%` }}
                     ></div>
-                  </div>
-                  
-                  {/* Quick select buttons */}
-                  <div className="pt-4 border-t border-gray-700">
-                    <div className="text-xs text-gray-400 mb-2">Quick Select:</div>
-                    <div className="flex flex-wrap gap-1">
-                      {[2026, 2025, 2024, 2023, 2022, 2020, 2019, 2015, 2010, 2000].map((year) => (
-                        <button
-                          key={year}
-                          onClick={() => handleYearChange(year)}
-                          className={`px-2 py-1 text-xs rounded ${
-                            filters.year === year
-                              ? "bg-blue-600 text-white"
-                              : "bg-gray-700 text-gray-300 hover:bg-gray-600"
-                          }`}
-                        >
-                          {year}
-                        </button>
-                      ))}
-                    </div>
                   </div>
                 </div>
               </div>
@@ -494,11 +465,59 @@ function Filters({
             </div>
           )}
         </div>
+        {/* NEW: Sort By Dropdown (instead of buttons) */}
+        <div className="relative" ref={sortRef}>
+          <div className="relative">
+            <button
+              onClick={() => setIsSortOpen(!isSortOpen)}
+              className="w-full bg-gray-800 text-left p-3 rounded-lg flex justify-between items-center hover:bg-gray-700 transition-colors"
+            >
+              <div className="min-w-0">
+                <div className="text-sm text-gray-400 truncate">Sort By</div>
+                <div className="text-white truncate">
+                  {getSelectedSortLabel()}
+                </div>
+              </div>
+
+              {isSortOpen ? (
+                <IoChevronUp className="text-gray-400 flex-shrink-0 ml-2" />
+              ) : (
+                <IoChevronDown className="text-gray-400 flex-shrink-0 ml-2" />
+              )}
+            </button>
+
+            {/* Sort Dropdown Menu */}
+            {isSortOpen && (
+              <div className="absolute min-w-[150px]  z-10 mt-2 w-full bg-gray-800 rounded-lg shadow-xl max-h-60 overflow-y-auto">
+                <div className="p-2">
+                  {sortOptions.map((option) => (
+                    <div
+                      key={option.value}
+                      onClick={() => handleSortChange(option.value)}
+                      className={`flex items-center justify-between p-2 rounded cursor-pointer hover:bg-gray-700 ${
+                        filters.sortBy === option.value ? "bg-blue-900/30" : ""
+                      }`}
+                    >
+                      <span className="text-white text-sm truncate">
+                        {option.label}
+                      </span>
+                      {filters.sortBy === option.value && (
+                        <div className="w-2 h-2 bg-amber-500 rounded-full flex-shrink-0 ml-2"></div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* Active Filters Display */}
-      {(filters.genres.length > 0 || filters.year || filters.language || 
-        filters.minYear !== 1900 || filters.maxYear !== 2026) && (
+      {(filters.genres.length > 0 ||
+        filters.language ||
+        filters.minYear !== 1900 ||
+        filters.maxYear !== 2026) && (
         <div className="mt-6 pt-6 border-t border-gray-700">
           <div className="text-sm text-gray-400 mb-3">Active Filters:</div>
           <div className="flex flex-wrap gap-2">
@@ -520,17 +539,7 @@ function Filters({
               ) : null;
             })}
 
-            {filters.year ? (
-              <div className="bg-blue-900/30 text-blue-300 px-3 py-1 rounded-full text-sm flex items-center gap-1">
-                Year: {filters.year}
-                <button
-                  onClick={() => handleYearChange("")}
-                  className="hover:text-white flex-shrink-0 ml-1"
-                >
-                  <IoClose size={14} />
-                </button>
-              </div>
-            ) : (filters.minYear !== 1900 || filters.maxYear !== 2026) && (
+            {(filters.minYear !== 1900 || filters.maxYear !== 2026) && (
               <div className="bg-blue-900/30 text-blue-300 px-3 py-1 rounded-full text-sm flex items-center gap-1">
                 Years: {filters.minYear} - {filters.maxYear}
                 <button

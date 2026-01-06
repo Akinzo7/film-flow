@@ -10,12 +10,14 @@ function MoviePage() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filters, setFilters] = useState({
-    genres: [],
-    year: "",
-    language: "",
-    sortBy: "popularity.desc"
-  });
+const [filters, setFilters] = useState({
+  genres: [],
+  minYear: 1900,
+  maxYear: 2026,
+  language: "",
+  sortBy: "popularity.desc"
+});
+
 
   // Fetch movies with filters
   const fetchMovies = async (filtersToUse = filters, pageNum = 1) => {
@@ -36,10 +38,17 @@ function MoviePage() {
         params.append("with_genres", filtersToUse.genres.join(","));
       }
 
-      // Add year filter (for movies)
-      if (filtersToUse.year) {
-        params.append("primary_release_year", filtersToUse.year);
-      }
+     // Add year range filter (for movies)
+params.append(
+  "primary_release_date.gte",
+  `${filtersToUse.minYear}-01-01`
+);
+params.append(
+  "primary_release_date.lte",
+  `${filtersToUse.maxYear}-12-31`
+);
+
+      
 
       // Add language filter
       if (filtersToUse.language) {

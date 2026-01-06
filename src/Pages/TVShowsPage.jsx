@@ -12,9 +12,10 @@ function TVShowsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filters, setFilters] = useState({
     genres: [],
-    year: "",
+    minYear: 1900,
+    maxYear: 2026,
     language: "",
-    sortBy: "popularity.desc"
+    sortBy: "popularity.desc",
   });
 
   // Fetch TV shows with filters
@@ -36,10 +37,9 @@ function TVShowsPage() {
         params.append("with_genres", filtersToUse.genres.join(","));
       }
 
-      // Add year filter (for TV shows - first air date)
-      if (filtersToUse.year) {
-        params.append("first_air_date_year", filtersToUse.year);
-      }
+      // Add year range filter (for TV shows)
+      params.append("first_air_date.gte", `${filtersToUse.minYear}-01-01`);
+      params.append("first_air_date.lte", `${filtersToUse.maxYear}-12-31`);
 
       // Add language filter
       if (filtersToUse.language) {
@@ -50,7 +50,9 @@ function TVShowsPage() {
       let url;
       if (searchQuery) {
         // Search endpoint for TV shows
-        url = `https://api.themoviedb.org/3/search/tv?${params}&query=${encodeURIComponent(searchQuery)}`;
+        url = `https://api.themoviedb.org/3/search/tv?${params}&query=${encodeURIComponent(
+          searchQuery
+        )}`;
       } else {
         // Discover endpoint for TV shows
         url = `https://api.themoviedb.org/3/discover/tv?${params}`;
@@ -99,7 +101,9 @@ function TVShowsPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2">TV Shows</h1>
-          <p className="text-gray-400">Discover and filter thousands of TV shows</p>
+          <p className="text-gray-400">
+            Discover and filter thousands of TV shows
+          </p>
         </div>
 
         {/* Search Bar */}
@@ -124,15 +128,15 @@ function TVShowsPage() {
 
         {/* Filters */}
         <div className="mb-8">
-          <Filters 
-            onFilterChange={handleFilterChange} 
-            mediaType="tv" 
+          <Filters
+            onFilterChange={handleFilterChange}
+            mediaType="tv"
             showSortOptions={[
               { value: "popularity.desc", label: "Most Popular" },
               { value: "vote_average.desc", label: "Top Rated" },
               { value: "first_air_date.desc", label: "Newest Releases" },
               { value: "first_air_date.asc", label: "Oldest Releases" },
-              { value: "vote_count.desc", label: "Most Votes" }
+              { value: "vote_count.desc", label: "Most Votes" },
             ]}
           />
         </div>
@@ -178,7 +182,9 @@ function TVShowsPage() {
           ) : (
             <div className="text-center py-20">
               <p className="text-gray-400 text-xl">No TV shows found</p>
-              <p className="text-gray-500 mt-2">Try adjusting your filters or search query</p>
+              <p className="text-gray-500 mt-2">
+                Try adjusting your filters or search query
+              </p>
             </div>
           )}
         </div>
