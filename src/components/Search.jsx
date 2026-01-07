@@ -7,20 +7,19 @@ function Search({search, setSearch, onSearchSubmit}) {
   // Get current location to check which page we're on
   const location = useLocation();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+ // src/components/Search.jsx
+const handleSubmit = (e) => {
+  e.preventDefault();
+  
+  if(search.trim()){
+    onSearchSubmit(search.trim());
     
-    if(search.trim()){
-      // Update the search query in App.jsx
-      onSearchSubmit(search.trim());
-      
-      // If we're NOT on the homepage, navigate to homepage with the search
-      // This ensures the search results are displayed
-      if (location.pathname !== '/') {
-        navigate('/');
-      }
-    } 
-  }
+    if (location.pathname !== '/') {
+      // Pass search query as state during navigation
+      navigate('/', { state: { searchQuery: search.trim() } });
+    }
+  } 
+}
 
   return (
     <form action="./search" role="search" className="max-w-2xl w-full px-4 md:px-0" onSubmit={handleSubmit}>

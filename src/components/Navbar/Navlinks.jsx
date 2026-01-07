@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 export function Navlinks({ clearSearch }) {
-   const handleHomeClick = () => {
+  const handleHomeClick = () => {
     if (clearSearch) {
       clearSearch(); // Clear search when Home is clicked
     }
@@ -10,7 +10,9 @@ export function Navlinks({ clearSearch }) {
     <div>
       <ul className="flex gap-2 ">
         <li className="hover:text-amber-500">
-          <Link to="/">Home</Link>
+          <Link to="/" onClick={() => clearSearch && clearSearch()}>
+            Home
+          </Link>
         </li>
         <li className="hover:text-amber-500">
           <Link to="/movies">Movies</Link>

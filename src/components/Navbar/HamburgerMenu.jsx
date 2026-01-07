@@ -14,6 +14,10 @@ function HamburgerMenu({ clearSearch }) {
     }
     setIsOpen(false);
   };
+
+  const handleLinkClick = () => {
+  setIsOpen(false);
+};
   return (
     <div className="md:hidden">
       {/* Hamburger Button */}

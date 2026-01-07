@@ -33,8 +33,7 @@ export function FavoritesProvider({ children }) {
         }
       });
       
-      setFavorites(migratedFavorities);
-    }
+setFavorites(migratedFavorites);    }
   }, []);
 
   // Save favorites to localStorage whenever they change
