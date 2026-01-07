@@ -12,6 +12,11 @@ function App() {
   const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
+   const clearSearch = () => {
+    setSearchInput("");
+    setSearchQuery("");
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 grid grid-rows-[auto_1fr_auto] grid-cols-1 text-white ">
       <header className=" area-header py-3 md:pt-6 md:px-8 px-4">
@@ -19,6 +24,7 @@ function App() {
           searchInput={searchInput}
           setSearchInput={setSearchInput}
           setSearchQuery={setSearchQuery}
+          clearSearch={clearSearch}
         />
       </header>
       <main className="area-main mb-7">

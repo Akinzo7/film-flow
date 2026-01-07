@@ -4,64 +4,57 @@ import Filters from "../components/Filters";
 import MovieCard from "../components/Movie/MovieCard";
 import { IoSearch } from "react-icons/io5";
 
+// MoviePage.jsx - Updated version with better separation
 function MoviePage() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
-const [filters, setFilters] = useState({
-  genres: [],
-  minYear: 1900,
-  maxYear: 2026,
-  language: "",
-  sortBy: "popularity.desc"
-});
-
+  const [isSearchMode, setIsSearchMode] = useState(false);
+  const [filters, setFilters] = useState({
+    genres: [],
+    minYear: 1900,
+    maxYear: 2026,
+    language: "",
+    sortBy: "popularity.desc",
+  });
 
   // Fetch movies with filters
-  const fetchMovies = async (filtersToUse = filters, pageNum = 1) => {
+  const fetchMovies = async (pageNum = 1) => {
     setLoading(true);
     try {
-      // Build query parameters
+      let url;
       const params = new URLSearchParams({
         api_key: import.meta.env.VITE_TMDB_KEY,
         language: "en-US",
         page: pageNum,
-        sort_by: filtersToUse.sortBy,
         include_adult: false,
-        include_video: false,
       });
 
-      // Add genre filter
-      if (filtersToUse.genres.length > 0) {
-        params.append("with_genres", filtersToUse.genres.join(","));
-      }
-
-     // Add year range filter (for movies)
-params.append(
-  "primary_release_date.gte",
-  `${filtersToUse.minYear}-01-01`
-);
-params.append(
-  "primary_release_date.lte",
-  `${filtersToUse.maxYear}-12-31`
-);
-
-      
-
-      // Add language filter
-      if (filtersToUse.language) {
-        params.append("with_original_language", filtersToUse.language);
-      }
-
-      // Determine API endpoint
-      let url;
-      if (searchQuery) {
-        // Search endpoint
-        url = `https://api.themoviedb.org/3/search/movie?${params}&query=${encodeURIComponent(searchQuery)}`;
+      if (isSearchMode && searchQuery.trim() !== "") {
+        // Search mode
+        params.append("query", encodeURIComponent(searchQuery.trim()));
+        url = `https://api.themoviedb.org/3/search/movie?${params}`;
       } else {
-        // Discover endpoint with filters
+        // Filter mode
+        params.append("sort_by", filters.sortBy);
+        params.append("include_video", false);
+        
+        // Add genre filter
+        if (filters.genres.length > 0) {
+          params.append("with_genres", filters.genres.join(","));
+        }
+
+        // Add year range filter
+        params.append("primary_release_date.gte", `${filters.minYear}-01-01`);
+        params.append("primary_release_date.lte", `${filters.maxYear}-12-31`);
+
+        // Add language filter
+        if (filters.language) {
+          params.append("with_original_language", filters.language);
+        }
+
         url = `https://api.themoviedb.org/3/discover/movie?${params}`;
       }
 
@@ -81,24 +74,50 @@ params.append(
   // Initial fetch
   useEffect(() => {
     fetchMovies();
-  }, []);
-
-  // Handle filter changes
-  const handleFilterChange = (newFilters) => {
-    setFilters(newFilters);
-    fetchMovies(newFilters, 1);
-  };
+  }, [isSearchMode, searchQuery, filters]); // Watch for mode changes
 
   // Handle search
   const handleSearch = (e) => {
     e.preventDefault();
-    fetchMovies(filters, 1);
+    if (searchQuery.trim() !== "") {
+      setIsSearchMode(true);
+      setPage(1);
+    } else {
+      setIsSearchMode(false);
+      setPage(1);
+    }
+    fetchMovies(1);
+  };
+
+  // Handle filter changes
+  const handleFilterChange = (newFilters) => {
+    setFilters(newFilters);
+    setIsSearchMode(false); // Switch to filter mode
+    setPage(1);
   };
 
   // Handle page change
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
-      fetchMovies(filters, newPage);
+      setPage(newPage);
+      fetchMovies(newPage);
+    }
+  };
+
+  // Clear search
+  const clearSearch = () => {
+    setSearchQuery("");
+    setIsSearchMode(false);
+    setPage(1);
+  };
+
+  // Update the input onChange to clear search mode when empty
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    
+    if (value.trim() === "") {
+      setIsSearchMode(false);
     }
   };
 
@@ -108,7 +127,17 @@ params.append(
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2">Movies</h1>
-          <p className="text-gray-400">Discover and filter thousands of movies</p>
+          <p className="text-gray-400">
+            {isSearchMode ? `Search results for "${searchQuery}"` : "Discover and filter thousands of movies"}
+          </p>
+          {isSearchMode && (
+            <button 
+              onClick={clearSearch}
+              className="mt-2 text-blue-400 hover:text-blue-300 text-sm"
+            >
+              ← Back to all movies
+            </button>
+          )}
         </div>
 
         {/* Search Bar */}
@@ -117,7 +146,12 @@ params.append(
             <input
               type="text"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={handleInputChange}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSearch(e);
+                }
+              }}
               placeholder="Search movies by title..."
               className="w-full bg-gray-900 text-white p-4 pl-12 rounded-lg border border-gray-700 focus:border-blue-500 focus:outline-none"
             />
@@ -131,21 +165,23 @@ params.append(
           </div>
         </form>
 
-        {/* Filters */}
-        <div className="mb-8">
-          <Filters 
-            onFilterChange={handleFilterChange} 
-            mediaType="movie" 
-            showSortOptions={[
-              { value: "popularity.desc", label: "Most Popular" },
-              { value: "vote_average.desc", label: "Top Rated" },
-              { value: "release_date.desc", label: "Newest Releases" },
-              { value: "release_date.asc", label: "Oldest Releases" },
-              { value: "revenue.desc", label: "Highest Revenue" },
-              { value: "vote_count.desc", label: "Most Votes" }
-            ]}
-          />
-        </div>
+        {/* Only show filters when not in search mode */}
+        {!isSearchMode && (
+          <div className="mb-8">
+            <Filters
+              onFilterChange={handleFilterChange}
+              mediaType="movie"
+              showSortOptions={[
+                { value: "popularity.desc", label: "Most Popular" },
+                { value: "vote_average.desc", label: "Top Rated" },
+                { value: "release_date.desc", label: "Newest Releases" },
+                { value: "release_date.asc", label: "Oldest Releases" },
+                { value: "revenue.desc", label: "Highest Revenue" },
+                { value: "vote_count.desc", label: "Most Votes" },
+              ]}
+            />
+          </div>
+        )}
 
         {/* Results */}
         <div>
@@ -187,8 +223,12 @@ params.append(
             </>
           ) : (
             <div className="text-center py-20">
-              <p className="text-gray-400 text-xl">No movies found</p>
-              <p className="text-gray-500 mt-2">Try adjusting your filters or search query</p>
+              <p className="text-gray-400 text-xl">
+                {isSearchMode ? `No movies found for "${searchQuery}"` : "No movies found"}
+              </p>
+              <p className="text-gray-500 mt-2">
+                {isSearchMode ? "Try a different search term" : "Try adjusting your filters"}
+              </p>
             </div>
           )}
         </div>

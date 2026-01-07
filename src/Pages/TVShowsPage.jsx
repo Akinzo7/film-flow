@@ -19,18 +19,26 @@ function TVShowsPage() {
   });
 
   // Fetch TV shows with filters
-  const fetchTVShows = async (filtersToUse = filters, pageNum = 1) => {
-    setLoading(true);
-    try {
-      // Build query parameters for TV shows
-      const params = new URLSearchParams({
-        api_key: import.meta.env.VITE_TMDB_KEY,
-        language: "en-US",
-        page: pageNum,
-        sort_by: filtersToUse.sortBy,
-        include_adult: false,
-        include_null_first_air_dates: false,
-      });
+ const fetchTVShows = async (filtersToUse = filters, pageNum = 1, searchText = searchQuery) => {
+  setLoading(true);
+  try {
+    const params = new URLSearchParams({
+      api_key: import.meta.env.VITE_TMDB_KEY,
+      language: "en-US",
+      page: pageNum,
+      include_adult: false,
+    });
+
+    let url;
+    
+    if (searchText && searchText.trim() !== "") {
+      // Search endpoint for TV shows
+      params.append("query", encodeURIComponent(searchText));
+      url = `https://api.themoviedb.org/3/search/tv?${params}`;
+    } else {
+      // Discover endpoint for TV shows
+      params.append("sort_by", filtersToUse.sortBy);
+      params.append("include_null_first_air_dates", false);
 
       // Add genre filter (TV genres)
       if (filtersToUse.genres.length > 0) {
@@ -46,54 +54,55 @@ function TVShowsPage() {
         params.append("with_original_language", filtersToUse.language);
       }
 
-      // Determine API endpoint
-      let url;
-      if (searchQuery) {
-        // Search endpoint for TV shows
-        url = `https://api.themoviedb.org/3/search/tv?${params}&query=${encodeURIComponent(
-          searchQuery
-        )}`;
-      } else {
-        // Discover endpoint for TV shows
-        url = `https://api.themoviedb.org/3/discover/tv?${params}`;
-      }
-
-      const response = await fetch(url);
-      const data = await response.json();
-
-      setTVShows(data.results || []);
-      setTotalPages(data.total_pages || 1);
-      setPage(pageNum);
-    } catch (error) {
-      console.error("Error fetching TV shows:", error);
-    } finally {
-      setLoading(false);
+      url = `https://api.themoviedb.org/3/discover/tv?${params}`;
     }
-  };
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    setTVShows(data.results || []);
+    setTotalPages(data.total_pages || 1);
+    setPage(pageNum);
+  } catch (error) {
+    console.error("Error fetching TV shows:", error);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   // Initial fetch
   useEffect(() => {
-    fetchTVShows();
-  }, []);
+  fetchTVShows();
+}, [searchQuery]);
 
   // Handle filter changes
   const handleFilterChange = (newFilters) => {
-    setFilters(newFilters);
-    fetchTVShows(newFilters, 1);
-  };
+  setFilters(newFilters);
+  fetchTVShows(newFilters, 1, searchQuery); // Pass searchQuery explicitly
+};
 
   // Handle search
-  const handleSearch = (e) => {
-    e.preventDefault();
-    fetchTVShows(filters, 1);
-  };
+const handleSearch = (e) => {
+  e.preventDefault();
+  setPage(1); // Reset to page 1
+  fetchTVShows(filters, 1, searchQuery);
+};
+
+useEffect(() => {
+  const timer = setTimeout(() => {
+    fetchTVShows(filters, page, searchQuery);
+  }, 500);
+
+  return () => clearTimeout(timer);
+}, [searchQuery, filters, page]);
 
   // Handle page change
-  const handlePageChange = (newPage) => {
-    if (newPage >= 1 && newPage <= totalPages) {
-      fetchTVShows(filters, newPage);
-    }
-  };
+const handlePageChange = (newPage) => {
+  if (newPage >= 1 && newPage <= totalPages) {
+    fetchTVShows(filters, newPage, searchQuery); // Pass searchQuery explicitly
+  }
+};
 
   return (
     <div className="min-h-screen bg-[#0a0e17] text-white">
@@ -113,6 +122,11 @@ function TVShowsPage() {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyPress={(e) => {
+        if (e.key === 'Enter') {
+          handleSearch(e);
+        }
+      }}
               placeholder="Search TV shows by title..."
               className="w-full bg-gray-900 text-white p-4 pl-12 rounded-lg border border-gray-700 focus:border-blue-500 focus:outline-none"
             />

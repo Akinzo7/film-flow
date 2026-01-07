@@ -64,11 +64,13 @@ function PopularTVCarousel({ tvShows }) {
           // TV show object for favorites - EXACTLY like movie object
           const tvShowForFavorites = {
             id: tvShow.id,
-            title: tvShow.name,
+            title: tvShow.name, // TV shows use 'name'
+            name: tvShow.name, // Keep 'name' for identification
             poster_path: tvShow.poster_path,
-            release_date: tvShow.first_air_date,
+            release_date: tvShow.first_air_date, // Keep for compatibility
             first_air_date: tvShow.first_air_date,
             vote_average: tvShow.vote_average,
+            type: "tv", // ← ADD THIS! Critical for favorites filtering
           };
 
           return (

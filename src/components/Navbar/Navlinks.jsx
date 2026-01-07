@@ -1,6 +1,11 @@
 import { Link } from "react-router-dom";
 
-export function Navlinks() {
+export function Navlinks({ clearSearch }) {
+   const handleHomeClick = () => {
+    if (clearSearch) {
+      clearSearch(); // Clear search when Home is clicked
+    }
+  };
   return (
     <div>
       <ul className="flex gap-2 ">

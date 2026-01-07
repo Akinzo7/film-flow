@@ -1,8 +1,13 @@
 import { Link } from "react-router-dom";
-export function Logo() {
+export function Logo({ clearSearch }) {
+  const handleClick = () => {
+    if (clearSearch) {
+      clearSearch(); // Clear search when logo is clicked
+    }
+  };
   return (
     <div>
-      <Link to="/" className="font-extrabold text-xl md:text-2xl cursor-pointer">
+      <Link onClick={handleClick} to="/" className="font-extrabold text-xl md:text-2xl cursor-pointer">
         Film<span className="text-amber-500">Flow</span>
       </Link>
     </div>

@@ -22,7 +22,9 @@ function MovieResults({ movies, isLoading, isError, searchQuery }) {
       </p>
       <h2 className="mt-2.5">Movies</h2>
       <div className="mt-6 grid movie_grid w-full overflow-hidden">
-        <MovieCard movies={movies?.results || []} />
+        {movies?.results?.map((movie) => (
+          <MovieCard key={movie.id} movie={movie} />
+        ))}
       </div>
     </div>
   );

@@ -2,13 +2,18 @@ import { useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-function HamburgerMenu() {
+function HamburgerMenu({ clearSearch }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
-
+  const handleHomeClick = () => {
+    if (clearSearch) {
+      clearSearch(); // Clear search when Home is clicked
+    }
+    setIsOpen(false);
+  };
   return (
     <div className="md:hidden">
       {/* Hamburger Button */}
@@ -32,7 +37,7 @@ function HamburgerMenu() {
               <Link
                 to="/"
                 className="block text-white hover:text-amber-500 py-2"
-                onClick={() => setIsOpen(false)}
+               onClick={handleHomeClick} 
               >
                 Home
               </Link>
@@ -41,7 +46,7 @@ function HamburgerMenu() {
               <Link
                 to="/movies"
                 className="block text-white hover:text-amber-500 py-2"
-                onClick={() => setIsOpen(false)}
+                 onClick={handleLinkClick}
               >
                 Movies
               </Link>
@@ -50,7 +55,7 @@ function HamburgerMenu() {
               <Link
                 to="/series"
                 className="block text-white hover:text-amber-500 py-2"
-                onClick={() => setIsOpen(false)}
+                 onClick={handleLinkClick}
               >
                 Series
               </Link>
@@ -59,7 +64,7 @@ function HamburgerMenu() {
               <Link
                 to="/favorites"
                 className="block text-white hover:text-amber-500 py-2"
-                onClick={() => setIsOpen(false)}
+                 onClick={handleLinkClick}
               >
                 Favorites
               </Link>

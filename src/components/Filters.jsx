@@ -260,7 +260,7 @@ const clearAllFilters = () => {
       </div>
 
       {/* Filter Grid */}
-      <div className="flex gap-4">
+      <div className="flex flex-wrap gap-4">
         {/* Genre Filter */}
         <div className="relative" ref={genreRef}>
           <button
