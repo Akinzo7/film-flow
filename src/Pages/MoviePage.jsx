@@ -167,7 +167,7 @@ function MoviePage() {
 
         {/* Only show filters when not in search mode */}
         {!isSearchMode && (
-          <div className="mb-8">
+          <div className="mb-6">
             <Filters
               onFilterChange={handleFilterChange}
               mediaType="movie"

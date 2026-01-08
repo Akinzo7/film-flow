@@ -1,41 +1,32 @@
 import { IoStar, IoAddOutline } from "react-icons/io5";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import useFetch from "../../hooks/useFetch";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { useRef } from "react";
 import { useFavorites } from "../../contexts/FavoritesContext";
 
 function MovieInfo() {
   const { id } = useParams();
+  const location = useLocation();
   const { isFavorite, toggleFavorite } = useFavorites();
   
   // Refs for scrolling
   const scrollContainerRef = useRef(null);
   const seasonsCarouselRef = useRef(null);
   
-  // Determine if it's a movie or TV show
-  const movieUrl = id
-    ? `https://api.themoviedb.org/3/movie/${id}?api_key=${
-        import.meta.env.VITE_TMDB_KEY
-      }&language=en-US`
-    : null;
-    
-  const tvShowUrl = id
-    ? `https://api.themoviedb.org/3/tv/${id}?api_key=${
-        import.meta.env.VITE_TMDB_KEY
-      }&language=en-US`
-    : null;
-
-  // Fetch both movie and TV show data
-  const { data: movie, isLoading: movieLoading, isError: movieError } = useFetch(movieUrl);
-  const { data: tvShow, isLoading: tvLoading, isError: tvError } = useFetch(tvShowUrl);
+  // ✅ FIX: Determine media type from the URL path instead of guessing
+  const isTVShow = location.pathname.startsWith('/tv/');
   
-  // Determine if it's a TV show
-  const isTVShow = tvShow && (!movie || movieError);
-  const media = isTVShow ? tvShow : movie;
-  const isLoading = isTVShow ? tvLoading : movieLoading;
-  const isError = isTVShow ? tvError : movieError;
+  // Build the correct URL based on media type
+  const mediaUrl = id
+    ? `https://api.themoviedb.org/3/${isTVShow ? 'tv' : 'movie'}/${id}?api_key=${
+        import.meta.env.VITE_TMDB_KEY
+      }&language=en-US`
+    : null;
 
+  // Fetch media data (movie or TV show)
+  const { data: media, isLoading, isError } = useFetch(mediaUrl);
+  
   // Fetch seasons data for TV shows
   const seasonsUrl = isTVShow && id
     ? `https://api.themoviedb.org/3/tv/${id}?api_key=${
@@ -137,7 +128,8 @@ function MovieInfo() {
     poster_path: media.poster_path,
     release_date: isTVShow ? media.first_air_date : media.release_date,
     first_air_date: isTVShow ? media.first_air_date : null,
-    vote_average: media.vote_average
+    vote_average: media.vote_average,
+    type: isTVShow ? 'tv' : 'movie', // ✅ Add explicit type
   } : null;
 
   if (isLoading)
@@ -261,7 +253,7 @@ function MovieInfo() {
         </button>
       </div>
       
-      {/* TV Show Seasons Section - ALL SEASONS IN ONE CAROUSEL */}
+      {/* TV Show Seasons Section - ONLY SHOWS FOR TV SHOWS */}
       {isTVShow && regularSeasons.length > 0 && (
         <div className="md:px-16 px-4 pb-20">
           <h2 className="text-2xl font-bold mt-6 mb-6">Seasons</h2>

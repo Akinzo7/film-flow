@@ -247,10 +247,9 @@ function Filters({
   const maxPercent = ((filters.maxYear - 1900) / (2026 - 1900)) * 100;
 
   return (
-    <div className="filters-container bg-[#0f172a] p-6 rounded-lg shadow-lg">
+    <div className="filters-container px-3 rounded-lg shadow-lg">
       {/* Filter Header */}
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-white">Filters</h2>
         {(filters.genres.length > 0 ||
           filters.language ||
           filters.minYear !== 1900 ||
@@ -270,7 +269,7 @@ function Filters({
         <div className="relative" ref={genreRef}>
           <button
             onClick={() => setIsGenreOpen(!isGenreOpen)}
-            className="w-full bg-gray-800 p-3 rounded-lg flex justify-between items-center hover:bg-gray-700 transition-colors"
+            className="w-full border-[#41527c] border-[0.8px] px-5 py-2 font-medium rounded-lg flex justify-between items-center hover:bg-gray-700 transition-colors"
           >
             {/* Only showing the selected value as button text */}
             <span className="text-white truncate">{getSelectedGenreText()}</span>
@@ -313,7 +312,7 @@ function Filters({
         <div className="relative" ref={yearRef}>
           <button
             onClick={() => setIsYearOpen(!isYearOpen)}
-            className="w-full bg-gray-800 p-3 rounded-lg flex justify-between items-center hover:bg-gray-700 transition-colors"
+            className="w-full border-[#41527c] border-[0.8px] px-5 py-2 font-medium rounded-lg flex justify-between items-center hover:bg-gray-700 transition-colors"
           >
             {/* Only showing the selected value as button text */}
             <span className="text-white truncate">{getYearButtonText()}</span>
@@ -414,7 +413,7 @@ function Filters({
         <div className="relative" ref={languageRef}>
           <button
             onClick={() => setIsLanguageOpen(!isLanguageOpen)}
-            className="w-full bg-gray-800 p-3 rounded-lg flex justify-between items-center hover:bg-gray-700 transition-colors"
+            className="w-full border-[#41527c] border-[0.8px] px-5 py-2 font-medium rounded-lg flex justify-between items-center hover:bg-gray-700 transition-colors"
           >
             {/* Only showing the selected value as button text */}
             <span className="text-white truncate">
@@ -465,7 +464,7 @@ function Filters({
         <div className="relative" ref={sortRef}>
           <button
             onClick={() => setIsSortOpen(!isSortOpen)}
-            className="w-full bg-gray-800 p-3 rounded-lg flex justify-between items-center hover:bg-gray-700 transition-colors"
+            className="w-full border-[#41527c] border-[0.8px] px-5 py-2 font-medium rounded-lg flex justify-between items-center hover:bg-gray-700 transition-colors"
           >
             {/* Only showing the selected value as button text */}
             <span className="text-white truncate">{getSortButtonText()}</span>

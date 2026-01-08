@@ -19,7 +19,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-900 grid grid-rows-[auto_1fr_auto] grid-cols-1 text-white ">
-      <header className=" area-header py-3 md:pt-6 md:px-8 px-4">
+      <header className="sticky top-0 z-50 bg-gray-900 area-header py-3 md:pt-6 md:px-8 px-4 shadow-lg">
         <Navbar
           searchInput={searchInput}
           setSearchInput={setSearchInput}

@@ -30,21 +30,21 @@ function Favorites() {
   }, [favorites, filter]);
 
   // Debug logging
-useEffect(() => {
-  console.log('Favorites debug:', {
-    totalFavorites: favorites?.length,
-    filteredCount: filteredFavorites?.length,
-    filterType: filter,
-    allFavorites: favorites?.map(f => ({
-      id: f.id,
-      title: f.title,
-      name: f.name,
-      type: f.type,
-      first_air_date: f.first_air_date,
-      release_date: f.release_date
-    }))
-  });
-}, [favorites, filteredFavorites, filter]);
+  useEffect(() => {
+    console.log('Favorites debug:', {
+      totalFavorites: favorites?.length,
+      filteredCount: filteredFavorites?.length,
+      filterType: filter,
+      allFavorites: favorites?.map(f => ({
+        id: f.id,
+        title: f.title,
+        name: f.name,
+        type: f.type,
+        first_air_date: f.first_air_date,
+        release_date: f.release_date
+      }))
+    });
+  }, [favorites, filteredFavorites, filter]);
 
   // Determine which list to display based on filter
   const displayList = filter === "all" ? favorites : filteredFavorites;
@@ -117,7 +117,10 @@ useEffect(() => {
       {/* Show filtered results */}
       {resultsCount > 0 ? (
         <div className="mt-6 grid movie_grid w-full overflow-hidden">
-          <MovieCard movies={displayList} />
+          {/* ✅ FIX: Map over displayList and pass each item individually */}
+          {displayList.map((item) => (
+            <MovieCard key={item.id} movie={item} />
+          ))}
         </div>
       ) : (
         <div className="text-center py-20">
