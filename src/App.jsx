@@ -33,7 +33,6 @@ function App() {
           <Route path="/movie/:id" element={<MovieInfo />} />
           <Route path="/tv/:id" element={<MovieInfo />} />  {/* Add TV show detail route */}
           <Route path="/favorites" element={<Favorites />} />
-          {/* Use the actual page components */}
           <Route path="/movies" element={<MoviePage />} />
           <Route path="/series" element={<TVShowsPage />} />
         </Routes>
