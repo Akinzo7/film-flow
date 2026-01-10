@@ -22,7 +22,7 @@ const Navbar = ({ searchInput, setSearchInput, setSearchQuery, clearSearch}) => 
         
       </div>
        <div className="md:hidden">
-        <HamburgerMenu />
+      <HamburgerMenu clearSearch={clearSearch} />
       </div>
        
     </nav>

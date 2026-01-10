@@ -22,7 +22,7 @@ const handleSubmit = (e) => {
 }
 
   return (
-    <form action="./search" role="search" className="max-w-2xl w-full px-4 md:px-0" onSubmit={handleSubmit}>
+    <form role="search" className="max-w-2xl w-full px-4 md:px-0" onSubmit={handleSubmit}>
       <label htmlFor="movie" className="sr-only">Search for movies</label>
       <div className="relative w-full">
         <input 

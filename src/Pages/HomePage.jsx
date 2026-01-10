@@ -10,6 +10,7 @@ import AiringTodayTVCarousel from "../components/AiringTodayTVCarousel";
 import ExpandedSection from "../components/ExpandedSection";
 import { useLocation } from "react-router-dom";
 function HomePage({ searchQuery }) {
+   const location = useLocation();
  const effectiveSearchQuery = location.state?.searchQuery || searchQuery;
 
   const url = effectiveSearchQuery

@@ -31,7 +31,7 @@ function MovieCard({ movie }) {  // Change from "movies" to "movie"
     <div className="md:w-[180px] w-[173px] max-[420px]:w-[155px] relative">
       {/* Movie card link */}
       <Link
-        to={`/movie/${movie.id}`}
+        to={movie.type === 'tv' ? `/tv/${movie.id}` : `/movie/${movie.id}`}
         style={{ backgroundImage: `url('${posterPath}')` }}
         className="w-full aspect-[2/3] flex flex-col justify-between bg-cover bg-center bg-gray-800 rounded-sm p-1 cursor-pointer"
       >

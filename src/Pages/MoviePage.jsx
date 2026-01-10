@@ -73,8 +73,8 @@ function MoviePage() {
 
   // Initial fetch
   useEffect(() => {
-    fetchMovies();
-  }, [isSearchMode, searchQuery, filters]); // Watch for mode changes
+    fetchMovies(page);
+  }, [isSearchMode, searchQuery, filters, page]); // Watch for mode changes
 
   // Handle search
   const handleSearch = (e) => {

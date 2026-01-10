@@ -29,22 +29,6 @@ function Favorites() {
     }
   }, [favorites, filter]);
 
-  // Debug logging
-  useEffect(() => {
-    console.log('Favorites debug:', {
-      totalFavorites: favorites?.length,
-      filteredCount: filteredFavorites?.length,
-      filterType: filter,
-      allFavorites: favorites?.map(f => ({
-        id: f.id,
-        title: f.title,
-        name: f.name,
-        type: f.type,
-        first_air_date: f.first_air_date,
-        release_date: f.release_date
-      }))
-    });
-  }, [favorites, filteredFavorites, filter]);
 
   // Determine which list to display based on filter
   const displayList = filter === "all" ? favorites : filteredFavorites;

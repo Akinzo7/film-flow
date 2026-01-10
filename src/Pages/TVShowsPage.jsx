@@ -72,9 +72,9 @@ function TVShowsPage() {
 
 
   // Initial fetch
-  useEffect(() => {
-  fetchTVShows();
-}, [searchQuery]);
+useEffect(() => {
+  fetchTVShows(filters, page, searchQuery);
+}, [searchQuery, filters, page]);
 
   // Handle filter changes
   const handleFilterChange = (newFilters) => {
