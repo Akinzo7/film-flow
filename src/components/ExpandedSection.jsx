@@ -32,7 +32,9 @@ function ExpandedSection({ movies, title, onBack }) {
 
       {/* Movie grid */}
       <div className="mt-6 grid movie_grid w-full overflow-hidden">
-        <MovieCard movies={movies} />
+       {movies.map((movie) => (
+  <MovieCard key={movie.id} movie={movie} />
+))}
       </div>
     </div>
   );

@@ -85,7 +85,7 @@ function PopularTVCarousel({ tvShows }) {
 
               {/* TV show card link - EXACTLY same style as movies */}
               <Link
-                to={`/movie/${tvShow.id}`} // Using movie route for now (same as movies)
+              to={`/tv/${tvShow.id}`} // Using movie route for now (same as movies)
                 style={{ backgroundImage: `url('${posterPath}')` }}
                 className="w-full aspect-[2/3] flex flex-col justify-between bg-cover bg-center bg-gray-800 rounded-sm p-1 cursor-pointer"
               >

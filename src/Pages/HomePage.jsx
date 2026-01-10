@@ -9,7 +9,6 @@ import FreeToWatchCarousel from "../components/FreeToWatchCarousel";
 import AiringTodayTVCarousel from "../components/AiringTodayTVCarousel";
 import ExpandedSection from "../components/ExpandedSection";
 import { useLocation } from "react-router-dom";
-
 function HomePage({ searchQuery }) {
  const effectiveSearchQuery = location.state?.searchQuery || searchQuery;
 
@@ -103,7 +102,7 @@ function HomePage({ searchQuery }) {
           {popularMoviesWeekData?.results && (
             <div className="px-4 md:px-8 mt-8">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl md:text-3xl font-bold">
+                <h2 className="text-[clamp(1.125rem, 2vw, 1.75rem)] font-bold">
                   Top 10 Popular Movies This Week
                 </h2>
                 <button
@@ -128,7 +127,7 @@ function HomePage({ searchQuery }) {
           {popularTVWeekData?.results && (
             <div className="px-4 md:px-8 mt-8">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl md:text-3xl font-bold">
+                <h2 className="text-[clamp(1.125rem, 2vw, 1.75rem)] font-bold">
                   Top 10 Popular TV Shows This Week
                 </h2>
                 <button
@@ -153,7 +152,7 @@ function HomePage({ searchQuery }) {
           {airingTodayData?.results && (
             <div className="px-4 md:px-8 mt-8">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl md:text-3xl font-bold">
+                <h2 className="text-[clamp(1.125rem, 2vw, 1.75rem)] font-bold">
                   TV Shows Airing Today
                 </h2>
                 <button
@@ -178,7 +177,7 @@ function HomePage({ searchQuery }) {
           {upcomingMoviesData?.results && (
             <div className="px-4 md:px-8 mt-8">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl md:text-3xl font-bold">
+                <h2 className="text-[clamp(1.125rem, 2vw, 1.75rem)] font-bold">
                   Upcoming Movies
                 </h2>
                 <button
@@ -200,7 +199,7 @@ function HomePage({ searchQuery }) {
           {freeToWatchData?.results && (
             <div className="px-4 md:px-8 mt-8">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl md:text-3xl font-bold">
+                <h2 className="text-[clamp(1.125rem, 2vw, 1.75rem)] font-bold">
                   Free Movies to Watch
                 </h2>
                 <button
