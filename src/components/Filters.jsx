@@ -427,7 +427,7 @@ function Filters({
           </button>
 
           {isLanguageOpen && (
-            <div className="absolute z-10 right-0 mt-2 w-[150px] bg-gray-800 rounded-lg shadow-xl max-h-60 overflow-y-auto">
+            <div className="absolute z-10 right-0 mt-2 w-[150px] bg-gray-800 rounded-lg shadow-xl max-h-60 overflow-x-hidden overflow-y-auto">
               <div className="p-2">
                 <div
                   onClick={() => handleLanguageChange("")}
