@@ -18,7 +18,7 @@ export function Navlinks({ clearSearch }) {
           <Link to="/movies">Movies</Link>
         </li>
         <li className="hover:text-amber-500">
-          <Link to="/series">Series</Link>
+          <Link to="/series">Shows</Link>
         </li>
         <li className="hover:text-amber-500">
           <Link to="/favorites">Favorites</Link>

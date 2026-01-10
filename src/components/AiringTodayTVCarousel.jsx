@@ -76,7 +76,7 @@ function AiringTodayTVCarousel({ tvShows }) {
           return (
             <div
               key={tvShow.id}
-              className="flex-shrink-0 w-[173px] md:w-[180px] relative pt-2"
+              className="flex-shrink-0 w-[150px] sm:w-[180px] relative pt-2"
             >
               {/* TV show card link */}
               <Link

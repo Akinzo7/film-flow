@@ -264,15 +264,15 @@ function Filters({
       </div>
 
       {/* Filter Grid - UPDATED: Buttons now show selected value as text */}
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap gap-2 sm:gap-4">
         {/* Genre Filter */}
         <div className="relative" ref={genreRef}>
           <button
             onClick={() => setIsGenreOpen(!isGenreOpen)}
-            className="w-full border-[#41527c] border-[0.8px] px-5 py-2 font-medium rounded-lg flex justify-between items-center hover:bg-gray-700 transition-colors"
+            className="w-full border-[#41527c] border-[0.8px] px-4 sm:px-5 py-2 font-medium rounded-lg flex justify-between items-center hover:bg-gray-700 transition-colors"
           >
             {/* Only showing the selected value as button text */}
-            <span className="text-white truncate">{getSelectedGenreText()}</span>
+            <span className="text-white text-[12px] sm:text-sm truncate">{getSelectedGenreText()}</span>
             {isGenreOpen ? (
               <IoChevronUp className="text-gray-400 flex-shrink-0 ml-2" />
             ) : (
@@ -312,10 +312,10 @@ function Filters({
         <div className="relative" ref={yearRef}>
           <button
             onClick={() => setIsYearOpen(!isYearOpen)}
-            className="w-full border-[#41527c] border-[0.8px] px-5 py-2 font-medium rounded-lg flex justify-between items-center hover:bg-gray-700 transition-colors"
+            className="w-full border-[#41527c] border-[0.8px] px-4 sm:px-5 py-2 font-medium rounded-lg flex justify-between items-center hover:bg-gray-700 transition-colors"
           >
             {/* Only showing the selected value as button text */}
-            <span className="text-white truncate">{getYearButtonText()}</span>
+            <span className="text-white text-[12px] sm:text-sm truncate">{getYearButtonText()}</span>
             {isYearOpen ? (
               <IoChevronUp className="text-gray-400 flex-shrink-0 ml-2" />
             ) : (
@@ -413,10 +413,10 @@ function Filters({
         <div className="relative" ref={languageRef}>
           <button
             onClick={() => setIsLanguageOpen(!isLanguageOpen)}
-            className="w-full border-[#41527c] border-[0.8px] px-5 py-2 font-medium rounded-lg flex justify-between items-center hover:bg-gray-700 transition-colors"
+            className="w-full border-[#41527c] border-[0.8px] px-4 sm:px-5 py-2 font-medium rounded-lg flex justify-between items-center hover:bg-gray-700 transition-colors"
           >
             {/* Only showing the selected value as button text */}
-            <span className="text-white truncate">
+            <span className="text-white text-[12px] sm:text-sm truncate">
               {getLanguageButtonText()}
             </span>
             {isLanguageOpen ? (
@@ -464,10 +464,10 @@ function Filters({
         <div className="relative" ref={sortRef}>
           <button
             onClick={() => setIsSortOpen(!isSortOpen)}
-            className="w-full border-[#41527c] border-[0.8px] px-5 py-2 font-medium rounded-lg flex justify-between items-center hover:bg-gray-700 transition-colors"
+            className="w-full border-[#41527c] border-[0.8px] px-4 sm:px-5 py-2 font-medium rounded-lg flex justify-between items-center hover:bg-gray-700 transition-colors"
           >
             {/* Only showing the selected value as button text */}
-            <span className="text-white truncate">{getSortButtonText()}</span>
+            <span className="text-white text-[12px] sm:text-sm truncate">{getSortButtonText()}</span>
             {isSortOpen ? (
               <IoChevronUp className="text-gray-400 flex-shrink-0 ml-2" />
             ) : (

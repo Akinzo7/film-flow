@@ -73,7 +73,7 @@ function FreeToWatchCarousel({ movies }) {
           return (
             <div
               key={movie.id}
-              className="flex-shrink-0 w-[173px] md:w-[180px] relative pt-2"
+              className="flex-shrink-0 w-[150px] sm:w-[180px] relative pt-2"
             >
               {/* Movie card link */}
               <Link

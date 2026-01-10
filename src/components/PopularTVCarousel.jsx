@@ -76,7 +76,7 @@ function PopularTVCarousel({ tvShows }) {
           return (
             <div
               key={tvShow.id}
-              className="flex-shrink-0 w-[173px] md:w-[180px] relative pt-2"
+              className="flex-shrink-0 w-[150px] sm:w-[180px] relative pt-2"
             >
               {/* Ranking number for top 10 - EXACTLY same as movies */}
               <div className="absolute -top-1 -left-1 bg-amber-500 text-black font-bold w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-full text-xs md:text-sm z-10 shadow-lg">

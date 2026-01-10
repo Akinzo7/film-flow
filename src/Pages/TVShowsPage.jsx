@@ -109,7 +109,7 @@ const handlePageChange = (newPage) => {
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">TV Shows</h1>
+          <h1 className="text-[clamp(1.25rem,3vw,2.25rem)] font-bold mb-2">TV Shows</h1>
           <p className="text-gray-400">
             Discover and filter thousands of TV shows
           </p>
